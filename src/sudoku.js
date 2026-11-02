@@ -244,12 +244,30 @@ if (typeof module !== 'undefined') module.exports = SudoEngine;
     });
     document.getElementById('sdNotes').classList.toggle('on', notesMode);
   }
+  const FIGS = (() => {
+    const s = 18;
+    const row = [3, 7, 1, 9, 4, 6, 2, 8, 5];
+    let a = figGrid(9, 1, s, 0, 0, (k, t) => t === 'c' && k % 3 === 0);
+    row.forEach((d, k) => a += figNum(k * s + s / 2, s / 2, d, '', 12));
+    const box = [[5, 3, 8], [1, 5, 2], [7, 4, 6]];
+    let b = figGrid(3, 3, s * 1.4, 0, 0);
+    box.forEach((l, r) => l.forEach((d, c) => b += figNum(c * s * 1.4 + s * .7, r * s * 1.4 + s * .7, d, d === 5 ? 'r' : '', 15)));
+    b += `<circle class="frs" cx="${s * .7}" cy="${s * .7}" r="10"/><circle class="frs" cx="${s * 1.4 + s * .7}" cy="${s * 1.4 + s * .7}" r="10"/>`;
+    const box2 = [[2, 7, 4], [8, 0, 1], [6, 3, 5]];
+    let c = figGrid(3, 3, s * 1.4, 0, 0);
+    box2.forEach((l, r) => l.forEach((d, k) => { if (d) c += figNum(k * s * 1.4 + s * .7, r * s * 1.4 + s * .7, d, '', 15); }));
+    c += `<rect class="fh" x="${s * 1.4}" y="${s * 1.4}" width="${s * 1.4}" height="${s * 1.4}"/>` + figNum(s * 1.4 + s * .7, s * 1.4 + s * .7, 9, 'r', 15);
+    return figFigs(
+      ruleFig(a, 9 * s, s, 'Une ligne contient chaque chiffre de 1 à 9 une seule fois (de même pour chaque colonne et chaque carré).', 'ok', true),
+      ruleFig(b, 3 * s * 1.4, 3 * s * 1.4, 'Deux 5 dans le même carré : c\'est impossible.', 'no'),
+      ruleFig(c, 3 * s * 1.4, 3 * s * 1.4, 'Il ne manque qu\'un chiffre à ce carré : forcément le 9.'));
+  })();
   registerGame({
     id: 'sudoku', name: 'Sudoku', kanji: '数', winText: 'Grille complète',
     levels: LV,
     rules: `<h3 style="margin-top:0">Sudoku 数 : les règles</h3><ul>
       <li>Remplis la grille avec les chiffres de <b>1 à 9</b>.</li>
-      <li>Chaque <b>ligne</b>, chaque <b>colonne</b> et chaque <b>carré 3×3</b> contient une seule fois chaque chiffre.</li></ul>
+      <li>Chaque <b>ligne</b>, chaque <b>colonne</b> et chaque <b>carré 3×3</b> contient une seule fois chaque chiffre.</li></ul>${FIGS}
       <h3>Commandes</h3><ul>
       <li>Touche une case, puis un chiffre du pavé. Retoucher le même chiffre l'efface.</li>
       <li>Le bouton <b>Notes</b> écrit de petits chiffres candidats au lieu du chiffre final.</li>
