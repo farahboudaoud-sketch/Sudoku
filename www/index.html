@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Sudoku 数</title>
+
+<style>
+@font-face{font-family:'Shippori Mincho';font-weight:400;font-display:block;src:url(fonts/sm-latin-400.woff2) format('woff2')}
+@font-face{font-family:'Shippori Mincho';font-weight:400;font-display:block;src:url(fonts/sm-jp-400.woff2) format('woff2');unicode-range:U+3000-9FFF,U+FF00-FFEF}
+@font-face{font-family:'Shippori Mincho';font-weight:600;font-display:block;src:url(fonts/sm-latin-600.woff2) format('woff2')}
+@font-face{font-family:'Shippori Mincho';font-weight:600;font-display:block;src:url(fonts/sm-jp-600.woff2) format('woff2');unicode-range:U+3000-9FFF,U+FF00-FFEF}
+@font-face{font-family:'Shippori Mincho';font-weight:800;font-display:block;src:url(fonts/sm-latin-800.woff2) format('woff2')}
+@font-face{font-family:'Shippori Mincho';font-weight:800;font-display:block;src:url(fonts/sm-jp-800.woff2) format('woff2');unicode-range:U+3000-9FFF,U+FF00-FFEF}
+@font-face{font-family:'Chiffres';font-weight:700;font-display:block;src:url(data:font/woff2;base64,d09GMgABAAAAAAZEABAAAAAAC4QAAAXrAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGYFSG1AcVAZgAFwRCAqKAIdoATYCJANECyYABCAFg2gHIBckGCYbMQkoHofpBnt2QFIvSWb58Lit97dZG5hcczojwZo1owo8vKKMwouuhH+QG72/IAi8reZxIIGkYdBtd3hCB3b9D0BO8GpNbQjUu/iwY/8TFR1hY8z/h/ZDfGEHrBhsXCJUbIUHtGXVqSKhKmxdK6zqplukmKVihCA6sgx//61AAFhDpz0GlilpOSXwunt1roP4dDbWQnxpG6rh9dY2aOH10XZtgMgSAECBgTM3XibDEgBAg4EE9mQGgpi3RugUEPPIGDTFVOsrdMl2179MOEZnU33Djqb9GM2F8KYPWQyI0ZNmWWklslO7NRgA+OpGao2dG2ANAGJA+TxES0vARLKOSJG1MD9e1TIvikXFQf3EaRK23dWsANnqHqwzSsESliDAmpSHSe4iBUNfofbCAqBGU2UAsq2TSXvIcgUaDwRoAAnupTnyXMFTrI50o3lkYEYSfudBkEfUXgA8L00BqVSGBsEYZKRtYX266xSi7MANXubmaDYHLy7oJ9wlpaIe/Lr3HwSICAjPwwqm430BD0BzIP0ByhIAADDgo27uozREgypw5Ap7eyteydF8a4m9nJP0JCYZRiK+rHT09etk0I0b3Jhr1zDw6lXVmAM3yKDr+9nRe69i4LV9nEWJSs0xHBl0Q73mypFWSy6zow+CHTRPUDIXYsgtzaUo/V3PktPW7YrBlbFwmWWJyTgC5/vizrUy1R5h8ZR+jZRISCVHcWChm2h+QVCvOpcxb5Cs0eYsLQWLFTuYoCUR6FEvVPAvWb2bVrxasubMmR3c1ouuiw5xS26geoiESLH2qk9+v53o3beM+exic66kMLD8uNSlEQYemtkSoF61jxsz7K88yb6P4FoJaJhCt8XkAJemF/aTQQcy2Ocx36vBl782TRygHTlLPUtLiJTmKC06XsQO6lOtKi5VF5aUFqj+2BS0yfdY0LOnx0JLUlBQlk8CLICufKPneieT3qBprPf03O9oMuj/o/uxLbRXvqg5069oH+RLRtYIdfG7vlEsTfwV88SaquoupVGawJBykmTrm5+StetuWmE7ToebNukVWU0ztHxuSR/nkE3RYQdEQScIvxXCSI+WMYbcjl4tkg1ZcbGaAKE4MjS8aLJjXHlsh84myP+ORY5XDCd17XWzuO8rnHHPIr429kkbMc7oKYpJMYmsUr5jhn6SQfdrJ9dfJpYFh2qz6nv1AGOjyJPHZrgOJVXUsV7bG8M6iLvyY+Uf+OSEPqSX9VteVAtC24SEQL1KTDQqgxLDBIlPQKxD87/o8vWYEbgybPGEJvox2QrfPn7jPMfJ+/fDP5u4dmGh2oSwcFW3poqM4OigMlWwGJkQ8LnRwcqM793CVGGJYR3bhcUahYyo8DwhOC+8izHGb1lwsNnT0xwcvAxHbELbR5zOj2n10CUlvi/pZX2XF8tO86LEQJ1ajFLmyWMy3IaRKvpoz+1lQwLjHJpL/BQn7JJiIOtyxoVXCB14CDtrXYzTzNMHGKjKu4zbywDc7fHS6MblFsUuLsU8n13rjKIZ0O+lY0uxM2LVR3Q2yQ8fZ2UeoIfAuw4ZfnluXge7mG/WHP0SAO4e2eEAAPd+WRnMI0UyNvQjEFiCAgAQgBn5/yFAvzdbMIxyCAIMw361NyXf4d8sUOQQ5D2GrPdgyXXI+ghFC8GSv/DvAWRRCBslw0vgz5F7dDG0DPojABxzQxOZmJ08tDdlBY09wtgAWAuUcgIva+UUrHFZTiPBbTmDoFrKLdCyrK+2hF8GJDNp1Etn1SpV6YonCCIQ8EpUMeJpGDXgFejMpIaRno4SdbNOq2LSWRc8n3VQV42+wSiBAlWqpp3WjU4APZP6GDIx6bfXMapg0qCrLgL13q3sr5ZW83QjU2s0q+n5nsWXTdnnpZcYL++2HpKY1DEIFiDoPuVoGqki6yoaHOvMFI7C7w/r2DPAl2kV41ukq5nYrlOsa+cIDbRq7pPMLxF7kK//JQD90jzBpkUAIEAg8R66EauwBet1bBO2UgVaRYYU9D1a5Sh5jMcAAAA=) format('woff2');unicode-range:U+0030-003A,U+002B,U+00B7,U+00D7,U+2014,U+2212}
+
+:root{--navy2:#060c1a;--ink:#efe8d8;--ink2:#b9b2a2;--ink3:rgba(239,232,216,.16);--red:#8a1c2f;--red2:#c4475b;--paper:#efe8d8;--tint:rgba(239,232,216,.06);--overfill:#2e1220;--warn:#efc3ca;--veil:rgba(6,12,26,.92);--veil2:rgba(6,12,26,.96);--num:'Chiffres','Shippori Mincho',serif}
+body.light{--navy2:#efe8d8;--ink:#0b1529;--ink2:#5b5e6b;--ink3:rgba(11,21,41,.22);--red2:#8a1c2f;--tint:rgba(11,21,41,.06);--overfill:#f2d3d8;--warn:#7a1a2b;--veil:rgba(239,232,216,.93);--veil2:rgba(239,232,216,.97)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--navy2);overscroll-behavior:none}
+body{font-family:'Shippori Mincho',Georgia,serif;color:var(--ink);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+button{font-family:inherit}
+.app{height:100vh;height:100dvh;max-width:680px;margin:0 auto;display:flex;flex-direction:column;
+padding:calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left))}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--ink3);padding-bottom:8px;flex-shrink:0}
+.title{display:flex;align-items:center;gap:10px}
+.kanji{font-size:28px;font-weight:800;line-height:1}
+h1{margin:0;font-size:19px;font-weight:600;letter-spacing:.18em;line-height:1.1}
+.sub{font-size:11px;color:var(--ink2);letter-spacing:.06em}
+.hdrbtn.theme{border-color:var(--ink3);color:var(--ink);transform:none;font-size:16px;font-weight:600;margin-right:6px}
+#home .theme{position:absolute;top:calc(14px + env(safe-area-inset-top));right:16px;margin:0}
+.back{background:transparent;border:1px solid var(--ink3);color:var(--ink);border-radius:6px;width:34px;height:34px;font-size:24px;line-height:1;cursor:pointer;padding:0 0 3px}
+.title{flex:1}
+.hdrbtn{background:transparent;border:1px solid var(--red);color:var(--red2);border-radius:4px;width:34px;height:34px;font-size:17px;font-weight:800;cursor:pointer;transform:rotate(-6deg)}
+.stats{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--ink2);margin:2px 2px 0;flex-shrink:0}
+.stats .v{color:var(--ink);font-size:15px;font-family:var(--num);font-weight:700;margin-left:4px}
+#meta{font-family:var(--num);font-size:11px;color:var(--ink2);text-align:center;letter-spacing:.05em;margin:3px 0 6px;flex-shrink:0}
+#area{position:relative;flex:1;min-height:0;border:1px solid var(--ink3);border-radius:10px;overflow:hidden;touch-action:none}
+#stage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+#board{display:block;width:100%;height:100%}
+.dot{fill:var(--ink);opacity:.34}
+.zone{fill:rgba(138,28,47,.18);stroke:var(--red2);stroke-width:1.5;stroke-dasharray:6 6;animation:breathe 2s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.45}}
+@keyframes draw{to{stroke-dashoffset:0}}
+.hcell{fill:none;stroke:var(--red2);stroke-width:4;animation:breathe 1.2s ease-in-out infinite}
+.gl{stroke:var(--ink3);stroke-width:1.5}
+.gl.b{stroke:var(--ink2);stroke-width:2.6}
+#pad{flex-shrink:0}
+body.arcade .actions{display:none}
+body.arcade #win{background:var(--veil)}
+body.nohints #hintBtn,body.nohints #verifyBtn,body.nohints .stats .hc{display:none}
+#hintBox{display:none;margin-top:6px;min-height:0;border-left:3px solid var(--red);background:var(--tint);padding:7px 10px;border-radius:0 6px 6px 0;font-size:13.5px;line-height:1.45;align-items:center;gap:10px;justify-content:space-between;flex-shrink:0}
+#hintBox.on{display:flex}
+#hintBox.warn{border-left-color:var(--red2);color:var(--warn)}
+#applyBtn{flex-shrink:0}
+.actions{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:8px 0 6px;flex-shrink:0}
+.act{background:transparent;border:1px solid var(--ink3);color:var(--ink);border-radius:6px;height:30px;padding:0 2px;font-size:11.5px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;overflow:hidden}
+.act em{font-style:normal;font-size:14px;line-height:1}
+.act.primary{border-color:var(--red)}
+.act.primary em{color:var(--red2)}
+.small.ghostb{background:transparent;border:1px solid var(--ink3);color:var(--ink)}
+#home{position:fixed;inset:0;z-index:8;background:var(--navy2);overflow:auto;display:flex;padding:calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));transition:opacity .35s ease}
+#home.hidden{opacity:0;pointer-events:none}
+.homein{margin:auto;width:100%;max-width:420px;text-align:center}
+.hk{font-size:88px;font-weight:800;line-height:1}
+.ht{font-size:24px;letter-spacing:.5em;margin:10px 0 2px;padding-left:.5em;font-weight:600}
+.hs{font-size:13px;color:var(--ink2);letter-spacing:.06em;margin-bottom:24px}
+.resume{display:none;width:100%;background:var(--red);color:var(--paper);border:0;border-radius:8px;padding:12px;font-size:16px;cursor:pointer;margin-bottom:18px}
+.resume.on{display:block}
+.resume small{display:block;font-family:var(--num);font-size:12px;opacity:.85;margin-top:2px}
+.hlabel{font-size:12px;color:var(--ink2);letter-spacing:.12em;margin-bottom:8px;text-align:left}
+.hlevels{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.hl{display:flex;align-items:center;gap:14px;background:transparent;border:1px solid var(--ink3);border-radius:8px;padding:10px 14px;color:var(--ink);cursor:pointer;text-align:left}
+.hl:active{background:var(--tint)}
+.hl b{font-size:28px;font-weight:800;color:var(--red2);width:34px}
+.hl span{flex:1;display:flex;flex-direction:column}
+.hl strong{font-weight:600;font-size:17px}
+.hl i{font-family:var(--num);font-style:normal;font-size:12px;color:var(--ink2)}
+.hl em{font-family:var(--num);font-style:normal;font-size:12px;color:var(--ink2)}
+.hl em{font-size:12px}
+#customPanel{display:none;border:1px solid var(--ink3);border-radius:8px;padding:12px 14px;text-align:left;margin-top:-2px}
+#customPanel.on{display:block}
+.crow{display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:14px}
+.crow span{width:64px;color:var(--ink2)}
+.crow input{flex:1;accent-color:var(--red2);height:28px}
+.crow b{font-family:var(--num);font-weight:700;width:28px;text-align:right;font-size:16px}
+.cseg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ink3);border-radius:6px;overflow:hidden;margin:4px 0 12px}
+.cseg button{background:transparent;border:0;color:var(--ink2);padding:8px;font-size:14px;cursor:pointer}
+.cseg button.on{background:var(--ink);color:var(--navy2)}
+.cfoot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#cInfo{font-family:var(--num);font-size:12px;color:var(--ink2)}
+.link{background:none;border:0;color:var(--ink2);font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pulse{animation:pulse 1.3s ease-in-out infinite}
+@keyframes pulse{0%,100%{background:transparent}50%{background:rgba(138,28,47,.35);border-color:var(--red2)}}
+.small{background:var(--red);color:var(--paper);border:0;border-radius:5px;padding:7px 12px;font-size:13px;cursor:pointer}
+#win{position:absolute;inset:0;display:none;place-items:center;background:var(--veil);z-index:3}
+#win.on{display:grid}
+#win.reveal{background:transparent;align-items:end}
+#win.reveal .wincard{background:var(--veil);border:1px solid var(--ink3);border-radius:12px;margin:0 10px 10px;padding:12px 18px}
+#win.reveal .seal{width:54px;height:54px;font-size:30px;margin-bottom:8px}
+.wincard{text-align:center;padding:20px}
+.seal{width:104px;height:104px;margin:0 auto 14px;background:var(--red);color:var(--paper);display:grid;place-items:center;font-size:58px;font-weight:800;border-radius:8px;transform:rotate(-8deg);animation:stamp .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes stamp{0%{transform:scale(2.4) rotate(-20deg);opacity:0}100%{transform:scale(1) rotate(-8deg);opacity:1}}
+.wincard h2{margin:0 0 6px;font-size:21px;letter-spacing:.12em;font-weight:600}
+.wincard p{font-family:var(--num);margin:4px 0;color:var(--ink2)}
+#winRecord{color:var(--red2)!important}
+#loading{position:absolute;inset:0;display:none;place-items:center;color:var(--ink2);font-size:14px;letter-spacing:.1em;background:var(--navy2);z-index:3}
+#loading.on{display:grid}
+#rules{position:fixed;inset:0;z-index:10;background:var(--veil2);display:none;overflow:auto;padding:calc(20px + env(safe-area-inset-top)) 20px 20px}
+#rules.on{display:block}
+.rulescard{max-width:560px;margin:0 auto;font-size:14.5px;line-height:1.65;color:var(--ink2)}
+.rulescard h3{margin:14px 0 6px;color:var(--ink);font-weight:600;font-size:17px}
+.rulescard ul{margin:0;padding-left:18px}
+.rulescard b{color:var(--ink)}
+#intro{position:fixed;inset:0;z-index:20;background:var(--navy2);display:grid;place-items:center;transition:opacity .6s ease}
+#intro.out{opacity:0;pointer-events:none}
+#intro svg{width:min(70vw,300px);height:auto;overflow:visible}
+.ic{fill:none;stroke:var(--ink);stroke-width:2.4;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s ease-out forwards}
+.icf{fill:var(--ink);opacity:0;animation:fade .3s ease-out forwards}
+.ik{font-family:'Shippori Mincho',serif;font-weight:800;font-size:64px;fill:var(--ink);text-anchor:middle;opacity:0;animation:rise .7s ease-out forwards}
+.it{font-family:'Shippori Mincho',serif;font-weight:600;font-size:15px;letter-spacing:.5em;fill:var(--ink2);text-anchor:middle;opacity:0;animation:fade .6s ease-out forwards}
+.iseal{fill:var(--red);opacity:0;transform-origin:252px 238px;animation:stampi .45s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes fade{to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes stampi{0%{opacity:0;transform:scale(2.2) rotate(-25deg)}100%{opacity:1;transform:scale(1) rotate(-8deg)}}
+@media (max-width:400px){.actions{gap:4px}.act{font-size:10px;gap:2px;padding:0 1px;letter-spacing:-.01em}.act em{font-size:12px}}
+@media (max-width:340px){.act em{display:none}}
+@media (max-height:640px){.hk{font-size:64px}.hs{margin-bottom:14px}.hl{padding:7px 12px}}
+.sd-cell{fill:transparent}
+.sd-cell.zone2{fill:var(--ink);fill-opacity:.05}
+.sd-cell.samed{fill:var(--red);fill-opacity:.16}
+.sd-cell.sel{fill:var(--red);fill-opacity:.32}
+.sd-g{fill:var(--ink);font-family:'Chiffres',sans-serif;font-size:32px;font-weight:700;text-anchor:middle;pointer-events:none}
+.sd-u{fill:#9dbbe8;font-family:'Chiffres',sans-serif;font-size:32px;font-weight:700;text-anchor:middle;pointer-events:none}
+body.light .sd-u{fill:#1f4a8a}
+.sd-g.bad,.sd-u.bad{fill:var(--red2);text-decoration:underline}
+body.light .sd-u.bad{fill:var(--red2)}
+.sd-u.fresh{animation:fade .25s ease-out}
+.sd-n{fill:var(--ink2);font-family:'Chiffres',sans-serif;font-size:14px;font-weight:700;text-anchor:middle;pointer-events:none}
+.sd-ghost{fill:var(--red2);font-family:'Chiffres',sans-serif;font-size:32px;font-weight:700;text-anchor:middle;opacity:.6;animation:breathe 1.3s ease-in-out infinite}
+.sd-pad{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-top:6px}
+.sd-pad button{height:42px;border:1px solid var(--ink3);background:transparent;color:var(--ink);border-radius:6px;font-family:'Chiffres',sans-serif;font-size:21px;font-weight:700;cursor:pointer;padding:0}
+.sd-pad button.same{border-color:var(--red2);color:var(--red2)}
+.sd-pad button.done{opacity:.25}
+.sd-pad .sd-wide{grid-column:span 5;font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;height:32px}
+.sd-pad .sd-wide+.sd-wide{grid-column:span 4}
+.sd-pad #sdNotes.on{background:var(--ink);color:var(--navy2)}
+
+</style>
+</head>
+<body>
+<script>try{if(localStorage.getItem('theme')==='"light"')document.body.classList.add('light')}catch(e){}</script>
+<div id="intro">
+  <svg viewBox="0 0 300 300" aria-label="Sudoku">
+    <rect class="ic" x="105" y="50" width="30" height="30" pathLength="1" style="animation-delay:0.00s"/><rect class="ic" x="135" y="50" width="30" height="30" pathLength="1" style="animation-delay:0.06s"/><rect class="ic" x="165" y="50" width="30" height="30" pathLength="1" style="animation-delay:0.12s"/><rect class="ic" x="105" y="80" width="30" height="30" pathLength="1" style="animation-delay:0.18s"/><rect class="ic" x="135" y="80" width="30" height="30" pathLength="1" style="animation-delay:0.24s"/><rect class="ic" x="165" y="80" width="30" height="30" pathLength="1" style="animation-delay:0.30s"/><rect class="ic" x="105" y="110" width="30" height="30" pathLength="1" style="animation-delay:0.36s"/><rect class="ic" x="135" y="110" width="30" height="30" pathLength="1" style="animation-delay:0.42s"/><rect class="ic" x="165" y="110" width="30" height="30" pathLength="1" style="animation-delay:0.48s"/><text x="120" y="73" style="fill:var(--ink);font-family:Chiffres,sans-serif;font-size:20px;font-weight:700;text-anchor:middle;opacity:0;animation:fade .3s ease-out 0.60s forwards">5</text><text x="150" y="103" style="fill:var(--ink);font-family:Chiffres,sans-serif;font-size:20px;font-weight:700;text-anchor:middle;opacity:0;animation:fade .3s ease-out 0.70s forwards">3</text><text x="180" y="133" style="fill:var(--ink);font-family:Chiffres,sans-serif;font-size:20px;font-weight:700;text-anchor:middle;opacity:0;animation:fade .3s ease-out 0.80s forwards">9</text><text x="180" y="73" style="fill:var(--ink);font-family:Chiffres,sans-serif;font-size:20px;font-weight:700;text-anchor:middle;opacity:0;animation:fade .3s ease-out 0.90s forwards">1</text><text x="120" y="133" style="fill:var(--ink);font-family:Chiffres,sans-serif;font-size:20px;font-weight:700;text-anchor:middle;opacity:0;animation:fade .3s ease-out 1.00s forwards">7</text><rect x="105" y="50" width="90" height="90" style="fill:none;stroke:var(--ink);stroke-width:3.5;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .6s ease-out .5s forwards" pathLength="1"/>
+    <text class="ik" x="150" y="252" style="animation-delay:1.25s">数</text>
+    <rect class="iseal" x="240" y="226" width="24" height="24" rx="3" style="animation-delay:1.7s"/>
+    <text class="it" x="156" y="290" style="animation-delay:1.5s">SUDOKU</text>
+  </svg>
+</div>
+<section id="home">
+  <button class="hdrbtn theme" data-theme-btn aria-label="Changer de mode">明</button>
+  <div class="homein">
+    <div class="hk">数</div>
+    <h1 class="ht">SUDOKU</h1>
+    <div class="hs">Chaque chiffre à sa place, une seule fois</div>
+    <button id="resumeBtn" class="resume">Reprendre la partie<small id="resumeInfo"></small></button>
+    <div class="hlabel" id="levelsLabel">Choisis ton niveau</div>
+    <div class="hlevels">
+      <div id="levelsList" style="display:flex;flex-direction:column;gap:8px"></div>
+      <button class="hl" id="customBtn"><b>自</b><span><strong>Personnalisé</strong><i>choisis la taille</i></span><em>›</em></button>
+      <div id="customPanel">
+        <label class="crow"><span>Largeur</span><input type="range" id="cw" step="1"><b id="cwV"></b></label>
+        <label class="crow" id="chRow"><span>Hauteur</span><input type="range" id="ch" step="1"><b id="chV"></b></label>
+        <div class="cseg"><button id="cClassic" class="on">Classique</button><button id="cHard">Difficile</button></div>
+        <div class="cfoot"><span id="cInfo"></span><button class="small" id="cPlay">Jouer</button></div>
+      </div>
+    </div>
+    <button class="link" id="rulesBtn2">Règles du jeu</button>
+  </div>
+</section>
+<div class="app">
+  <header>
+    <button class="back" id="backBtn" aria-label="Choix du niveau">‹</button>
+    <div class="title"><span class="kanji">数</span><h1>SUDOKU</h1></div>
+    <div style="display:flex"><button class="hdrbtn theme" data-theme-btn aria-label="Changer de mode">明</button><button class="hdrbtn" id="rulesBtn" aria-label="Règles">?</button></div>
+  </header>
+  <div class="actions">
+    <button class="act" id="undoBtn"><em>戻</em>Annuler</button>
+    <button class="act" id="verifyBtn"><em>検</em>Vérifier</button>
+    <button class="act primary" id="hintBtn"><em>灯</em><span>Indice</span></button>
+    <button class="act" id="resetBtn"><em>消</em>Effacer</button>
+    <button class="act" id="newBtn"><em>新</em>Nouvelle</button>
+  </div>
+  <div class="stats">
+    <div><span id="stat1L">Temps</span><span class="v" id="timer">0:00</span></div>
+    <div class="hc">Indices<span class="v" id="hintCount">0</span></div>
+    <div>Record<span class="v" id="best">—</span></div>
+  </div>
+  <div id="meta"></div>
+  <div id="area">
+    <div id="stage"><svg id="board" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div id="win"><div class="wincard">
+      <div class="seal">完</div>
+      <h2 id="winTitle">Grille résolue</h2>
+      <p id="winLine">Temps : <span id="winTime"></span> · <span id="winHints"></span></p>
+      <p id="winRecord">Nouveau record pour ce niveau</p>
+      <p style="margin-top:14px;display:flex;gap:8px;justify-content:center"><button class="small" id="winNew">Nouvelle grille</button><button class="small ghostb" id="winHome">Changer de niveau</button></p>
+    </div></div>
+    <div id="loading">Préparation de l'encre…</div>
+  </div>
+  <div id="pad"></div>
+  <div id="hintBox"><span id="hintText"></span><button class="small" id="applyBtn">Poser</button></div>
+</div>
+<div id="rules"><div class="rulescard">
+  <div id="rulesBody"></div>
+  <h3>Commandes communes</h3>
+  <ul>
+    <li><b>Zoom</b> : pince à deux doigts (ou molette de la souris).</li>
+    <li>L'<b>indice</b> se précise à chaque appui : une zone, puis l'endroit, puis la déduction expliquée.</li>
+    <li>Le bouton ‹ ramène au choix du niveau, ta partie est gardée. 明 / 暗 passe en mode clair ou sombre.</li>
+  </ul>
+  <p style="text-align:center;margin-top:18px"><button class="small" id="rulesClose">Fermer</button></p>
+</div></div>
+<script>
+// ---------------------------------------------------------------------------
+// Noyau commun des jeux de la série (écrans, zoom, gestes, indices, records)
+// ---------------------------------------------------------------------------
+const S = 60, IDLE_MS = 120000;
+const $ = id => document.getElementById(id);
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+function registerGame(m) { G = m; }
+const dims = s => (G.dims ? G.dims(s) : { cols: s.W, rows: s.H, ox: 0, oy: 0 });
+
+let G = null;              // current game module
+let st = null;             // current game state (saved)
+let inGame = false, undo = [], hint = null, flashWrong = null, won = false, fresh = null;
+
+function fmt(ms) {
+  const s = Math.floor(ms / 1000);
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+function plural(n, w) { return n + ' ' + w + (n > 1 ? 's' : ''); }
+
+// ---------- state & storage ----------
+const keyState = id => id + '-v1', keyBest = id => id + '-best', keyCustom = id => id + '-custom';
+function save() { if (st && G) store.set(keyState(G.id), st); }
+function levelOf(s) {
+  if (s.level === 'perso') return G.customLevel(s.custom.W, s.custom.H, s.custom.hard);
+  return G.levels[s.level];
+}
+function bestKey() { return st.level === 'perso' ? `perso-${st.W}x${st.H}${st.custom && st.custom.hard ? '-d' : ''}` : st.level; }
+
+function newGame(level, custom) {
+  if (level === 'perso') custom = custom || (st && st.custom) || store.get(keyCustom(G.id)) || G.customDefault;
+  const L = level === 'perso' ? G.customLevel(custom.W, custom.H, custom.hard) : G.levels[level];
+  $('loading').classList.add('on');
+  setTimeout(() => {
+    const data = G.generate(L);
+    st = Object.assign({ level, custom: level === 'perso' ? custom : null, elapsed: 0, hints: 0, done: false,
+      no: 1000 + Math.floor(Math.random() * 9000) }, data);
+    st.x = G.emptyX(st);
+    start();
+    $('loading').classList.remove('on');
+  }, 30);
+}
+function start() {
+  G.prepare(st);
+  undo = []; hint = null; flashWrong = null; won = st.done; fresh = null;
+  st.lastProg = Date.now(); st.bestProg = G.progress(st);
+  const L = levelOf(st);
+  $('meta').textContent = G.arcade ? L.label + ' · ' + st.W + '×' + st.H : L.label + (st.custom && st.custom.hard ? ' difficile' : '') + ' · ' + st.W + '×' + st.H + ' · grille n° ' + st.no;
+  const d = dims(st);
+  $('board').setAttribute('viewBox', `0 0 ${d.cols * S} ${d.rows * S}`);
+  $('pad').innerHTML = G.padHTML ? G.padHTML(st) : '';
+  if (G.padBind) G.padBind(st);
+  fitStage(true);
+  $('win').classList.remove('on');
+  showHintText('');
+  render(); save(); updateStats();
+  if (won) showWin(false);
+}
+
+// ---------- moves (used by the game modules) ----------
+let stroke = false;
+function snapshot() { undo.push(st.x.slice()); if (undo.length > 400) undo.shift(); }
+function commit(mutator) {            // one complete move
+  if (won) return;
+  snapshot();
+  mutator();
+  afterMove();
+}
+function beginStroke() { if (won) return false; snapshot(); stroke = true; return true; }
+function strokeChanged() { hint = null; flashWrong = null; render(); }
+function endStroke(changed) {
+  if (!stroke) return;
+  stroke = false;
+  if (!changed) { undo.pop(); return; }
+  afterMove();
+}
+function afterMove() {
+  hint = null; flashWrong = null; showHintText('');
+  updateStats();
+  const p = G.progress(st);
+  if (p > st.bestProg) { st.bestProg = p; st.lastProg = Date.now(); }
+  render(); save(); checkWin();
+}
+function say(msg, warn) { showHintText(msg, warn !== false); }
+
+function checkWin() {
+  const r = G.check(st);
+  if (r !== true) { if (typeof r === 'string') showHintText(r, true); return; }
+  st.done = true; won = true; save();
+  const bests = store.get(keyBest(G.id)) || {};
+  const prev = bests[bestKey()];
+  const val = G.recordValue ? G.recordValue(st) : st.elapsed;
+  const record = G.recordHigh ? (val > 0 && (!prev || val > prev)) : (st.hints === 0 && (!prev || val < prev));
+  if (record) { bests[bestKey()] = val; store.set(keyBest(G.id), bests); }
+  showWin(record);
+}
+function showWin(record) {
+  $('winTitle').textContent = G.winText || 'Grille résolue';
+  if (G.winLineText) $('winLine').textContent = G.winLineText(st);
+  else $('winLine').innerHTML = `Temps : <span id="winTime">${fmt(st.elapsed)}</span> · <span id="winHints">${st.hints === 0 ? 'sans indice' : plural(st.hints, 'indice')}</span>`;
+  $('winRecord').style.display = record ? 'block' : 'none';
+  fitStage(true);
+  $('win').classList.toggle('reveal', !!G.revealWin);
+  $('win').classList.add('on');
+  render();
+}
+
+// ---------- rendering ----------
+function render() {
+  if (!st) return;
+  const parts = [];
+  const d = dims(st);
+  if (hint && hint.level >= 1 && hint.r !== undefined) {
+    const r0 = Math.max(0, hint.r - 2), r1 = Math.min(st.H - 1, hint.r + 2), c0 = Math.max(0, hint.c - 2), c1 = Math.min(st.W - 1, hint.c + 2);
+    parts.push(`<rect class="zone" x="${(c0 + d.ox) * S + 4}" y="${(r0 + d.oy) * S + 4}" width="${(c1 - c0 + 1) * S - 8}" height="${(r1 - r0 + 1) * S - 8}" rx="14"/>`);
+  }
+  parts.push(G.render(st, { hint, flash: flashWrong, fresh, won }));
+  $('board').innerHTML = parts.join('');
+  if (G.afterRender) G.afterRender(st, { hint, won });
+  fresh = null;
+}
+function svgPoint(ev) {
+  const svg = $('board'), p = svg.createSVGPoint();
+  p.x = ev.clientX; p.y = ev.clientY;
+  return p.matrixTransform(svg.getScreenCTM().inverse());
+}
+function cellAt(pt) {
+  const d = dims(st);
+  const c = Math.floor(pt.x / S - d.ox), r = Math.floor(pt.y / S - d.oy);
+  if (r < 0 || c < 0 || r >= st.H || c >= st.W) return null;
+  return { r, c };
+}
+
+// ---------- zoom ----------
+const Z = { s: 1, tx: 0, ty: 0, w: 0, h: 0, cell: 1, maxS: 3 };
+function areaSize() { const a = $('area'); return { aw: a.clientWidth, ah: a.clientHeight }; }
+function fitStage(reset) {
+  if (!st) return;
+  const { aw, ah } = areaSize(), pad = 6;
+  const d = dims(st);
+  const cell = Math.max(1, Math.min((aw - pad * 2) / d.cols, (ah - pad * 2) / d.rows));
+  Z.cell = cell; Z.w = cell * d.cols; Z.h = cell * d.rows;
+  Z.maxS = G.noZoom ? 1 : Math.max(2.5, 56 / cell);
+  if (reset) Z.s = 1;
+  applyZ();
+}
+function applyZ() {
+  const { aw, ah } = areaSize();
+  Z.s = Math.min(Z.maxS, Math.max(1, Z.s));
+  const sw = Z.w * Z.s, sh = Z.h * Z.s;
+  Z.tx = sw <= aw ? (aw - sw) / 2 : Math.min(0, Math.max(aw - sw, Z.tx));
+  Z.ty = sh <= ah ? (ah - sh) / 2 : Math.min(0, Math.max(ah - sh, Z.ty));
+  const stg = $('stage');
+  stg.style.width = sw + 'px'; stg.style.height = sh + 'px';
+  stg.style.transform = `translate(${Z.tx}px,${Z.ty}px)`;
+}
+function zoomAt(f, px, py) {
+  const cx = (px - Z.tx) / Z.s, cy = (py - Z.ty) / Z.s;
+  Z.s = Math.min(Z.maxS, Math.max(1, Z.s * f));
+  Z.tx = px - cx * Z.s; Z.ty = py - cy * Z.s;
+  applyZ();
+}
+function focusCell(r, c) {
+  if (Z.s <= 1.01 || r === undefined) return;
+  const { aw, ah } = areaSize(), d = dims(st);
+  r += d.oy; c += d.ox;
+  Z.tx = aw / 2 - (c + .5) * Z.cell * Z.s;
+  Z.ty = ah / 2 - (r + .5) * Z.cell * Z.s;
+  applyZ();
+}
+
+// ---------- gestures ----------
+// One finger: the game decides (draw, paint, tap). Where the game allows it (pan: true), a drag pans once zoomed.
+// Two fingers: pinch zoom and pan.
+function areaXY(ev) { const r = $('area').getBoundingClientRect(); return { x: ev.clientX - r.left, y: ev.clientY - r.top }; }
+const ptrs = new Map();
+let gest = null;
+function onDown(ev) {
+  if (!st || ev.target.closest('#win')) return;
+  ev.preventDefault();
+  try { $('area').setPointerCapture(ev.pointerId); } catch (e) {}
+  const p = areaXY(ev);
+  ptrs.set(ev.pointerId, p);
+  if (ptrs.size === 1) {
+    const pt = svgPoint(ev);
+    const g = won ? { pan: true } : (G.pointerDown(st, pt) || { pan: true });
+    gest = { mode: 'game', start: p, pt, g, tx0: Z.tx, ty0: Z.ty };
+  } else if (ptrs.size === 2) {
+    if (gest && gest.mode === 'game' && G.pointerCancel) G.pointerCancel(st, gest.g);
+    const [a, b] = [...ptrs.values()];
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    gest = { mode: 'pinch', d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, s0: Z.s, cx: (mx - Z.tx) / Z.s, cy: (my - Z.ty) / Z.s };
+  }
+}
+function onMove(ev) {
+  if (!ptrs.has(ev.pointerId) || !gest) return;
+  const p = areaXY(ev);
+  ptrs.set(ev.pointerId, p);
+  if (gest.mode === 'pinch' && ptrs.size >= 2) {
+    const [a, b] = [...ptrs.values()];
+    const d = Math.hypot(a.x - b.x, a.y - b.y), mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    Z.s = Math.min(Z.maxS, Math.max(1, gest.s0 * d / gest.d0));
+    Z.tx = mx - gest.cx * Z.s; Z.ty = my - gest.cy * Z.s;
+    applyZ();
+    return;
+  }
+  if (gest.mode === 'game') {
+    const moved = Math.hypot(p.x - gest.start.x, p.y - gest.start.y);
+    if (gest.g.pan && moved > 8) { gest.mode = Z.s > 1.01 ? 'pan' : 'none'; }
+    else if (!won && G.pointerMove) G.pointerMove(st, gest.g, svgPoint(ev));
+  }
+  if (gest.mode === 'pan') {
+    Z.tx = gest.tx0 + (p.x - gest.start.x); Z.ty = gest.ty0 + (p.y - gest.start.y);
+    applyZ();
+  }
+}
+function onEnd(ev) {
+  if (!ptrs.has(ev.pointerId)) return;
+  ptrs.delete(ev.pointerId);
+  const g = gest;
+  if (g && g.mode === 'game' && !won) {
+    if (ev.type === 'pointerup') G.pointerUp(st, g.g, svgPoint(ev), g.pt);
+    else if (G.pointerCancel) G.pointerCancel(st, g.g);
+  }
+  if (ptrs.size === 0) gest = null;
+  else if (g && g.mode === 'pinch') gest = { mode: 'none' };
+}
+function onWheel(ev) {
+  if (!st) return;
+  ev.preventDefault();
+  const p = areaXY(ev);
+  zoomAt(Math.exp(-ev.deltaY * 0.0015), p.x, p.y);
+}
+
+// ---------- hints ----------
+function askHint() {
+  if (!st || won) return;
+  if (!hint) {
+    hint = G.findHint(st);
+    if (!hint) return;
+    hint.level = 0;
+    st.hints++; save(); updateStats();
+  }
+  hint.level = Math.min(3, hint.level + 1);
+  const msgs = {
+    1: hint.type === 'wrong' ? 'Il y a une erreur quelque part dans cette zone.' : 'Regarde dans cette zone : une déduction t\'y attend.',
+    2: hint.focusText || 'Concentre-toi sur cet endroit.',
+    3: hint.text
+  };
+  showHintText(msgs[hint.level], false, hint.level === 3 && !!hint.apply);
+  $('hintBtn').classList.remove('pulse');
+  $('hintBtn').querySelector('span').textContent = hint.level < 3 ? 'Suite' : 'Indice';
+  st.lastProg = Date.now();
+  render();
+  focusCell(hint.r, hint.c);
+}
+function applyHint() {
+  if (!hint || hint.level < 3 || !hint.apply) return;
+  const h = hint;
+  snapshot();
+  const ok = h.apply(st);
+  if (ok === false) { undo.pop(); return; }
+  fresh = h.fresh || null;
+  $('hintBtn').querySelector('span').textContent = 'Indice';
+  afterMove();
+}
+function showHintText(t, warn, withApply) {
+  $('hintText').textContent = t;
+  $('hintBox').classList.toggle('on', !!t);
+  $('hintBox').classList.toggle('warn', !!warn);
+  $('applyBtn').style.display = withApply ? 'inline-flex' : 'none';
+  if (!t) $('hintBtn').querySelector('span').textContent = 'Indice';
+}
+function verify() {
+  if (!st || won) return;
+  const bad = G.wrong(st);
+  flashWrong = bad;
+  showHintText(bad.size ? G.wrongText(bad.size) : 'Aucune erreur pour l\'instant. Continue.', bad.size > 0);
+  render();
+  setTimeout(() => { flashWrong = null; render(); }, 2500);
+}
+function doUndo() {
+  if (!undo.length || won) return;
+  st.x = undo.pop();
+  hint = null; showHintText(''); render(); save();
+}
+function reset() {
+  if (!st) return;
+  snapshot();
+  st.x = G.emptyX(st); st.done = false; won = false; hint = null;
+  $('win').classList.remove('on'); showHintText(''); render(); save();
+}
+function updateStats() {
+  if (!st) return;
+  $('timer').textContent = G.statValue ? G.statValue(st) : fmt(st.elapsed);
+  $('hintCount').textContent = st.hints;
+  const b = (store.get(keyBest(G.id)) || {})[bestKey()];
+  $('best').textContent = b ? (G.bestFmt ? G.bestFmt(b) : fmt(b)) : '—';
+}
+function tick() {
+  if (!st || won || document.hidden || !inGame) return;
+  st.elapsed += 1000; updateStats();
+  if (!G.noHints && Date.now() - st.lastProg > IDLE_MS && !hint) {
+    if (!$('hintBtn').classList.contains('pulse')) {
+      $('hintBtn').classList.add('pulse');
+      showHintText('Tu bloques ? Un indice t\'attend.');
+    }
+  }
+  if (st.elapsed % 5000 === 0) save();
+}
+
+// ---------- screens ----------
+function showView(v) {              // 'home' | 'game'
+  inGame = v === 'game';
+  $('home').classList.toggle('hidden', v === 'game');
+  if (v === 'game' && st) { st.lastProg = Date.now(); fitStage(false); }
+  if (v !== 'game') $('home').scrollTop = 0;
+}
+function loadSaved() {
+  const saved = store.get(keyState(G.id));
+  if (saved && saved.W && G.valid(saved) && (saved.level === 'perso' ? saved.custom && G.customLevel : G.levels[saved.level])) {
+    st = saved;
+    try { start(); } catch (e) { console.error(e); st = null; }
+  }
+}
+function renderLevels() {
+  const bests = store.get(keyBest(G.id)) || {};
+  $('levelsList').innerHTML = Object.keys(G.levels).map(k => {
+    const L = G.levels[k], b = bests[k];
+    const size = L.sizeLabel || (L.W + '×' + L.H);
+    return `<button class="hl" data-l="${k}"><b>${L.kanji}</b><span><strong>${L.label}</strong><i>${size}</i></span><em>${b ? (G.bestLabel ? G.bestLabel(b) : 'record ' + fmt(b)) : ''}</em></button>`;
+  }).join('');
+  document.querySelectorAll('#levelsList [data-l]').forEach(b => b.addEventListener('click', () => { showView('game'); newGame(b.dataset.l); }));
+  const rb = $('resumeBtn');
+  if (st && !st.done) {
+    const L = levelOf(st);
+    $('resumeInfo').textContent = L.label + (st.custom && st.custom.hard ? ' difficile' : '') + ' · ' + (L.sizeLabel || st.W + '×' + st.H) + ' · ' + (G.resumeLabel ? G.resumeLabel(st) : fmt(st.elapsed));
+    rb.classList.add('on');
+  } else rb.classList.remove('on');
+  $('customBtn').style.display = G.customLevel ? '' : 'none';
+  if (G.customLevel) {
+    const c = store.get(keyCustom(G.id)) || G.customDefault;
+    $('cw').min = G.customRange.W[0]; $('cw').max = G.customRange.W[1];
+    $('ch').min = G.customRange.H[0]; $('ch').max = G.customRange.H[1];
+    $('cw').value = c.W; $('ch').value = c.H;
+    $('cHard').classList.toggle('on', !!c.hard); $('cClassic').classList.toggle('on', !c.hard);
+  }
+  $('customPanel').classList.remove('on');
+  syncCustom();
+}
+function syncCustom() {
+  if (!G || !G.customLevel) return;
+  $('cwV').textContent = $('cw').value; $('chV').textContent = $('ch').value;
+  $('cInfo').textContent = G.customInfo(+$('cw').value, +$('ch').value, $('cHard').classList.contains('on'));
+}
+function backFromGame() { if (st) save(); renderLevels(); showView('home'); }
+
+// ---------- theme ----------
+function applyTheme(light) {
+  document.body.classList.toggle('light', light);
+  document.querySelectorAll('[data-theme-btn]').forEach(b => {
+    b.textContent = light ? '暗' : '明';
+    b.setAttribute('aria-label', light ? 'Mode sombre' : 'Mode clair');
+  });
+  try {
+    const SB = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.SystemBars;
+    if (SB && SB.setStyle) SB.setStyle({ style: light ? 'LIGHT' : 'DARK' });
+  } catch (e) {}
+}
+
+function init() {
+  applyTheme(store.get('theme') === 'light');
+  document.querySelectorAll('[data-theme-btn]').forEach(b => b.addEventListener('click', () => {
+    const light = !document.body.classList.contains('light');
+    store.set('theme', light ? 'light' : 'dark');
+    applyTheme(light);
+  }));
+  ['cw', 'ch'].forEach(id => $(id).addEventListener('input', syncCustom));
+  $('cClassic').addEventListener('click', () => { $('cClassic').classList.add('on'); $('cHard').classList.remove('on'); syncCustom(); });
+  $('cHard').addEventListener('click', () => { $('cHard').classList.add('on'); $('cClassic').classList.remove('on'); syncCustom(); });
+  $('customBtn').addEventListener('click', () => { const on = $('customPanel').classList.toggle('on'); syncCustom(); if (on) setTimeout(() => $('customPanel').scrollIntoView({ behavior: 'smooth', block: 'end' }), 50); });
+  $('cPlay').addEventListener('click', () => {
+    const c = { W: +$('cw').value, H: +$('ch').value, hard: $('cHard').classList.contains('on') };
+    store.set(keyCustom(G.id), c);
+    showView('game'); newGame('perso', c);
+  });
+  $('resumeBtn').addEventListener('click', () => showView('game'));
+  $('backBtn').addEventListener('click', backFromGame);
+  $('winHome').addEventListener('click', backFromGame);
+  $('rulesBtn2').addEventListener('click', () => $('rules').classList.add('on'));
+  const area = $('area');
+  area.addEventListener('pointerdown', onDown);
+  area.addEventListener('pointermove', onMove);
+  area.addEventListener('pointerup', onEnd);
+  area.addEventListener('pointercancel', onEnd);
+  area.addEventListener('wheel', onWheel, { passive: false });
+  $('hintBtn').addEventListener('click', askHint);
+  $('applyBtn').addEventListener('click', applyHint);
+  $('verifyBtn').addEventListener('click', verify);
+  $('undoBtn').addEventListener('click', doUndo);
+  $('resetBtn').addEventListener('click', reset);
+  $('newBtn').addEventListener('click', () => newGame(st ? st.level : Object.keys(G.levels)[0]));
+  $('winNew').addEventListener('click', () => newGame(st.level));
+  window.addEventListener('resize', () => fitStage(false));
+  $('rulesBtn').addEventListener('click', () => $('rules').classList.add('on'));
+  $('rulesClose').addEventListener('click', () => $('rules').classList.remove('on'));
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); doUndo(); return; }
+    if (inGame && st && !won && G.onKey) G.onKey(st, e);
+  });
+  if (G.noHints) document.body.classList.add('nohints');
+  if (G.arcade) document.body.classList.add('arcade');
+  if (G.statLabel) $('stat1L').textContent = G.statLabel;
+  if (G.newText) $('winNew').textContent = G.newText;
+  $('rulesBody').innerHTML = G.rules;
+  loadSaved();
+  renderLevels();
+  showView('home');
+  setInterval(tick, 1000);
+  const intro = $('intro');
+  const hideIntro = () => { if (intro.classList.contains('out')) return; intro.classList.add('out'); setTimeout(() => intro.remove(), 700); };
+  intro.addEventListener('pointerdown', hideIntro);
+  setTimeout(hideIntro, 2700);
+}
+
+// Sudoku 数独 : moteur (générateur, solveur par techniques, raisonnements) puis interface
+const SudoEngine = (function () {
+  const N = 81, ALL = 0x3FE;   // bits 1..9
+  const ROW = [], COL = [], BOX = [], PEERS = [], UNITS = [];
+  for (let i = 0; i < N; i++) { ROW.push((i / 9) | 0); COL.push(i % 9); BOX.push(((ROW[i] / 3) | 0) * 3 + ((COL[i] / 3) | 0)); }
+  const unitCells = [];
+  for (let u = 0; u < 9; u++) unitCells.push([...Array(9).keys()].map(k => u * 9 + k));                       // rows
+  for (let u = 0; u < 9; u++) unitCells.push([...Array(9).keys()].map(k => k * 9 + u));                       // cols
+  for (let u = 0; u < 9; u++) { const r0 = ((u / 3) | 0) * 3, c0 = (u % 3) * 3; const l = []; for (let a = 0; a < 3; a++) for (let b = 0; b < 3; b++) l.push((r0 + a) * 9 + c0 + b); unitCells.push(l); }
+  for (let i = 0; i < N; i++) {
+    UNITS.push([ROW[i], 9 + COL[i], 18 + BOX[i]]);
+    const s = new Set(); for (const u of UNITS[i]) for (const j of unitCells[u]) if (j !== i) s.add(j);
+    PEERS.push([...s]);
+  }
+  const bits = m => { const l = []; for (let d = 1; d <= 9; d++) if (m & (1 << d)) l.push(d); return l; };
+  const pop = m => { let c = 0; while (m) { m &= m - 1; c++; } return c; };
+  const unitName = u => u < 9 ? 'cette ligne' : u < 18 ? 'cette colonne' : 'ce carré';
+  // candidates from values
+  function cands(v) {
+    const c = new Int16Array(N);
+    for (let i = 0; i < N; i++) {
+      if (v[i]) { c[i] = 1 << v[i]; continue; }
+      let m = ALL; for (const j of PEERS[i]) if (v[j]) m &= ~(1 << v[j]);
+      c[i] = m;
+    }
+    return c;
+  }
+  // Logical solver. note(i, d, text, unit) -> true to stop. Returns false on contradiction.
+  function propagate(v, c, note, opts) {
+    opts = opts || {};
+    let changed = true;
+    const place = (i, d, why, unit) => {
+      v[i] = d; c[i] = 1 << d;
+      for (const j of PEERS[i]) if (!v[j]) c[j] &= ~(1 << d);
+      return note ? note(i, d, why, unit) : false;
+    };
+    while (changed) {
+      changed = false;
+      for (let i = 0; i < N; i++) {
+        if (v[i]) continue;
+        if (!c[i]) return false;
+        if (pop(c[i]) === 1) {
+          const d = bits(c[i])[0];
+          if (place(i, d, `Cette case ne peut contenir que le ${d} : tous les autres chiffres sont déjà dans sa ligne, sa colonne ou son carré.`, -1)) return 'stop';
+          changed = true;
+        }
+      }
+      if (changed) continue;
+      for (let u = 0; u < 27 && !changed; u++) {
+        for (let d = 1; d <= 9; d++) {
+          let where = -1, n = 0, placed = false;
+          for (const j of unitCells[u]) { if (v[j] === d) { placed = true; break; } if (!v[j] && (c[j] & (1 << d))) { n++; where = j; } }
+          if (placed) continue;
+          if (!n) return false;
+          if (n === 1) {
+            if (place(where, d, `Dans ${unitName(u)}, le ${d} ne peut aller qu'ici : toutes les autres cases libres le voient déjà.`, u)) return 'stop';
+            changed = true; break;
+          }
+        }
+      }
+      if (changed || !opts.advanced) continue;
+      // pointing / claiming : a digit confined to one box line removes it elsewhere
+      for (let b = 18; b < 27 && !changed; b++) for (let d = 1; d <= 9; d++) {
+        const cells = unitCells[b].filter(j => !v[j] && (c[j] & (1 << d)));
+        if (cells.length < 2) continue;
+        for (const lineOf of [ROW, COL]) {
+          const l = lineOf[cells[0]];
+          if (!cells.every(j => lineOf[j] === l)) continue;
+          const lineUnit = lineOf === ROW ? l : 9 + l;
+          for (const j of unitCells[lineUnit]) if (!v[j] && BOX[j] !== b - 18 && (c[j] & (1 << d))) { c[j] &= ~(1 << d); changed = true; }
+        }
+      }
+      // naked pairs
+      for (let u = 0; u < 27 && !changed; u++) {
+        const cs = unitCells[u].filter(j => !v[j] && pop(c[j]) === 2);
+        for (let a = 0; a < cs.length; a++) for (let b = a + 1; b < cs.length; b++) if (c[cs[a]] === c[cs[b]]) {
+          for (const j of unitCells[u]) if (j !== cs[a] && j !== cs[b] && !v[j] && (c[j] & c[cs[a]])) { c[j] &= ~c[cs[a]]; changed = true; }
+        }
+      }
+    }
+    return true;
+  }
+  function solve(v0, limit) {        // fast backtracking for counting
+    let count = 0, sol = null;
+    const rec = (v, c) => {
+      if (count >= limit) return;
+      if (propagate(v, c) === false) return;
+      let best = -1, bc = 10;
+      for (let i = 0; i < N; i++) if (!v[i]) { const p = pop(c[i]); if (p < bc) { bc = p; best = i; if (p === 2) break; } }
+      if (best < 0) { count++; sol = Array.from(v); return; }
+      for (const d of bits(c[best])) {
+        const v2 = v.slice(), c2 = c.slice();
+        v2[best] = d; c2[best] = 1 << d;
+        for (const j of PEERS[best]) if (!v2[j]) c2[j] &= ~(1 << d);
+        rec(v2, c2);
+        if (count >= limit) return;
+      }
+    };
+    const v = Int8Array.from(v0);
+    rec(v, cands(v));
+    return { count, sol };
+  }
+  function fullGrid() {
+    const v = new Int8Array(N);
+    const rec = i => {
+      if (i === N) return true;
+      const c = cands(v)[i], ds = bits(c).sort(() => Math.random() - 0.5);
+      for (const d of ds) { v[i] = d; if (rec(i + 1)) return true; }
+      v[i] = 0; return false;
+    };
+    rec(0);
+    return Array.from(v);
+  }
+  // difficulty: 0 = singles only, 1 = needs pairs/pointing, 2 = needs proofs by contradiction (look = count)
+  function rate(given) {
+    let v = Int8Array.from(given), c = cands(v);
+    if (propagate(v, c) === false) return { level: -1 };
+    const open = () => v.filter(x => !x).length;
+    if (!open()) return { level: 0, look: 0 };
+    if (propagate(v, c, null, { advanced: true }) === false) return { level: -1 };
+    if (!open()) return { level: 1, look: 0 };
+    let look = 0;
+    while (open()) {
+      let progress = false;
+      for (let i = 0; i < N && !progress; i++) {
+        if (v[i]) continue;
+        for (const d of bits(c[i])) {
+          const v2 = v.slice(), c2 = c.slice();
+          v2[i] = d; c2[i] = 1 << d; for (const j of PEERS[i]) if (!v2[j]) c2[j] &= ~(1 << d);
+          if (propagate(v2, c2, null, { advanced: true }) === false) { c[i] &= ~(1 << d); look++; progress = true; break; }
+        }
+        if (progress && propagate(v, c, null, { advanced: true }) === false) return { level: -1 };
+      }
+      if (!progress) return { level: 3, look };
+    }
+    return { level: 2, look };
+  }
+  function generate(L) {
+    const t0 = Date.now();
+    let best = null;
+    for (let attempt = 0; attempt < 60; attempt++) {
+      const sol = fullGrid(), g = sol.slice();
+      const order = [...Array(41).keys()].sort(() => Math.random() - 0.5);  // symmetric pairs (i, 80 - i)
+      for (const i of order) {
+        if (g.filter(x => x).length <= L.givens) break;
+        const j = 80 - i, a = g[i], b = g[j];
+        g[i] = 0; g[j] = 0;
+        const r = solve(g, 2);
+        if (r.count !== 1) { g[i] = a; g[j] = b; continue; }
+        const rt = rate(g);
+        if (rt.level > L.maxLevel) { g[i] = a; g[j] = b; }
+      }
+      const rt = rate(g);
+      const ok = rt.level >= L.minLevel && (!L.look || rt.look >= L.look);
+      if (ok) return { W: 9, H: 9, given: g, sol, rating: rt };
+      if (!best || rt.level > best.rating.level || (rt.level === best.rating.level && rt.look > best.rating.look)) best = { W: 9, H: 9, given: g, sol, rating: rt };
+      if (Date.now() - t0 > 6000) break;
+    }
+    return best;
+  }
+  return { N, ROW, COL, BOX, PEERS, UNITS, unitCells, bits, pop, cands, propagate, solve, rate, generate };
+})();
+if (typeof module !== 'undefined') module.exports = SudoEngine;
+
+// ---------------------------------------------------------------------------
+// Interface Sudoku. st.x : 0..80 chiffres du joueur, 81..161 notes (masques).
+// ---------------------------------------------------------------------------
+(function () {
+  if (typeof registerGame === 'undefined') return;
+  const E = SudoEngine;
+  let sel = -1, notesMode = false;
+  const LV = {
+    facile:    { W: 9, H: 9, givens: 38, minLevel: 0, maxLevel: 0, label: 'Facile',    kanji: '易', sizeLabel: '9×9 · déductions simples' },
+    moyen:     { W: 9, H: 9, givens: 30, minLevel: 0, maxLevel: 0, label: 'Moyen',     kanji: '中', sizeLabel: '9×9 · moins de chiffres' },
+    difficile: { W: 9, H: 9, givens: 26, minLevel: 1, maxLevel: 1, label: 'Difficile', kanji: '難', sizeLabel: '9×9 · paires et alignements' },
+    expert:    { W: 9, H: 9, givens: 24, minLevel: 2, maxLevel: 2, label: 'Expert',    kanji: '極', sizeLabel: '9×9 · raisonnement par l\'absurde' },
+    maitre:    { W: 9, H: 9, givens: 22, minLevel: 2, maxLevel: 2, look: 6, label: 'Maître', kanji: '鬼', sizeLabel: '9×9 · chaînes d\'absurdes' }
+  };
+  const val = (s, i) => s.given[i] || s.x[i];
+  const values = s => { const v = new Int8Array(81); for (let i = 0; i < 81; i++) v[i] = val(s, i); return v; };
+  function conflicts(s) {
+    const bad = new Set(), v = values(s);
+    for (let i = 0; i < 81; i++) if (v[i]) for (const j of E.PEERS[i]) if (v[j] === v[i]) bad.add(i);
+    return bad;
+  }
+  function setDigit(s, d) {
+    if (sel < 0 || s.given[sel]) return;
+    const i = sel;
+    if (notesMode && d) {
+      if (s.x[i]) return;
+      commit(() => { s.x[81 + i] ^= 1 << d; });
+      return;
+    }
+    if (s.x[i] === d) d = 0;
+    commit(() => {
+      s.x[i] = d; s.x[81 + i] = 0;
+      if (d) for (const j of E.PEERS[i]) s.x[81 + j] &= ~(1 << d);   // clean notes of peers
+      fresh = d ? i : null;
+    });
+  }
+  function findHint(s) {
+    for (let i = 0; i < 81; i++) if (s.x[i] && s.x[i] !== s.sol[i]) return { type: 'wrong', i, d: 0, text: `Ce ${s.x[i]} n'est pas à sa place : retire-le.` };
+    const v = Int8Array.from(s.sol.map((x, i) => (s.given[i] || (s.x[i] === x ? x : 0))));
+    const c = E.cands(v);
+    let found = null;
+    const note = (i, d, why, u) => { found = { i, d, text: why, unit: u }; return true; };
+    E.propagate(v, c, note);
+    if (!found) {
+      E.propagate(v, c, note, { advanced: true });
+      if (found) found.text += ' (Après avoir appliqué les paires et les alignements de chiffres dans les carrés.)';
+    }
+    for (let round = 0; round < 60 && !found; round++) {
+      let progress = false;
+      for (let i = 0; i < 81 && !progress; i++) {
+        if (v[i]) continue;
+        for (const d of E.bits(c[i])) {
+          const v2 = v.slice(), c2 = c.slice();
+          v2[i] = d; c2[i] = 1 << d; for (const j of E.PEERS[i]) if (!v2[j]) c2[j] &= ~(1 << d);
+          if (E.propagate(v2, c2, null, { advanced: true }) === false) {
+            c[i] &= ~(1 << d); progress = true;
+            if (E.pop(c[i]) === 1) {
+              const left = E.bits(c[i])[0];
+              found = { i, d: left, text: `Raisonnement par l'absurde : si on mettait le ${d} ici, une autre case n'aurait plus aucun chiffre possible. Il ne reste donc que le ${left}.` };
+            }
+            break;
+          }
+        }
+      }
+      if (!progress) break;
+      if (!found) E.propagate(v, c, (i, d, why, u) => { found = { i, d, unit: u, text: why + ' (Après avoir éliminé certains chiffres par l\'absurde.)' }; return true; }, { advanced: true });
+    }
+    if (!found) for (let i = 0; i < 81; i++) if (!val(s, i)) { found = { i, d: s.sol[i], text: `Déduction avancée : cette case contient le ${s.sol[i]}.` }; break; }
+    return found;
+  }
+  function padRefresh(s) {
+    const pad = document.getElementById('sdPad');
+    if (!pad || !s) return;
+    const v = values(s), cnt = new Array(10).fill(0);
+    for (let i = 0; i < 81; i++) if (v[i]) cnt[v[i]]++;
+    pad.querySelectorAll('[data-d]').forEach(b => {
+      const d = +b.dataset.d;
+      b.classList.toggle('done', cnt[d] >= 9);
+      b.classList.toggle('same', sel >= 0 && v[sel] === d);
+    });
+    document.getElementById('sdNotes').classList.toggle('on', notesMode);
+  }
+  registerGame({
+    id: 'sudoku', name: 'Sudoku', kanji: '数', winText: 'Grille complète',
+    levels: LV,
+    rules: `<h3 style="margin-top:0">Sudoku 数 : les règles</h3><ul>
+      <li>Remplis la grille avec les chiffres de <b>1 à 9</b>.</li>
+      <li>Chaque <b>ligne</b>, chaque <b>colonne</b> et chaque <b>carré 3×3</b> contient une seule fois chaque chiffre.</li></ul>
+      <h3>Commandes</h3><ul>
+      <li>Touche une case, puis un chiffre du pavé. Retoucher le même chiffre l'efface.</li>
+      <li>Le bouton <b>Notes</b> écrit de petits chiffres candidats au lieu du chiffre final.</li>
+      <li>Les chiffres en conflit apparaissent en rouge. Les chiffres déjà placés 9 fois s'estompent dans le pavé.</li></ul>`,
+    valid: s => !!s.given && !!s.sol && s.x && s.x.length === 162,
+    generate: L => { const g = E.generate(L); return { W: 9, H: 9, given: g.given, sol: g.sol }; },
+    emptyX: s => new Array(162).fill(0),
+    prepare: s => { sel = -1; notesMode = false; },
+    progress: s => { let p = 0; for (let i = 0; i < 81; i++) if (!s.given[i] && s.x[i] === s.sol[i]) p++; return p; },
+    check: s => {
+      for (let i = 0; i < 81; i++) if (!val(s, i)) return false;
+      return conflicts(s).size === 0 ? true : 'La grille est pleine, mais certains chiffres se répètent.';
+    },
+    wrong: s => { const b = new Set(); for (let i = 0; i < 81; i++) if (s.x[i] && s.x[i] !== s.sol[i]) b.add(i); return b; },
+    wrongText: n => `${plural(n, 'chiffre')} faux, en rouge.`,
+    findHint: s => {
+      const h = findHint(s);
+      if (!h) return null;
+      h.r = E.ROW[h.i]; h.c = E.COL[h.i];
+      h.focusText = h.type === 'wrong' ? 'L\'erreur est dans cette case.' : (h.unit >= 0 && h.unit !== undefined ? `Regarde ${h.unit < 9 ? 'cette ligne' : h.unit < 18 ? 'cette colonne' : 'ce carré'}.` : 'Regarde cette case.');
+      h.fresh = h.i;
+      h.apply = st => { st.x[h.i] = h.d; st.x[81 + h.i] = 0; if (h.d) for (const j of E.PEERS[h.i]) st.x[81 + j] &= ~(1 << h.d); sel = h.i; };
+      return h;
+    },
+    render: (s, ctx) => {
+      const out = [], v = values(s), bad = conflicts(s), h = ctx.hint;
+      const sv = sel >= 0 ? v[sel] : 0;
+      for (let i = 0; i < 81; i++) {
+        const r = E.ROW[i], c = E.COL[i], x = c * S, y = r * S;
+        let cls = 'sd-cell';
+        if (sel >= 0 && (E.ROW[sel] === r || E.COL[sel] === c || E.BOX[sel] === E.BOX[i])) cls += ' zone2';
+        if (sv && v[i] === sv) cls += ' samed';
+        if (i === sel) cls += ' sel';
+        out.push(`<rect class="${cls}" x="${x}" y="${y}" width="${S}" height="${S}"/>`);
+      }
+      if (h && h.level >= 2 && h.unit >= 0 && h.unit !== undefined) {
+        const cells = E.unitCells[h.unit];
+        const rs = cells.map(i => E.ROW[i]), cs = cells.map(i => E.COL[i]);
+        const r0 = Math.min(...rs), r1 = Math.max(...rs), c0 = Math.min(...cs), c1 = Math.max(...cs);
+        out.push(`<rect class="hcell" x="${c0 * S + 3}" y="${r0 * S + 3}" width="${(c1 - c0 + 1) * S - 6}" height="${(r1 - r0 + 1) * S - 6}" rx="6"/>`);
+      }
+      for (let k = 0; k <= 9; k++) {
+        const b = k % 3 === 0 ? ' b' : '';
+        out.push(`<line class="gl${b}" x1="0" y1="${k * S}" x2="${9 * S}" y2="${k * S}"/><line class="gl${b}" x1="${k * S}" y1="0" x2="${k * S}" y2="${9 * S}"/>`);
+      }
+      for (let i = 0; i < 81; i++) {
+        const r = E.ROW[i], c = E.COL[i], cx = c * S + S / 2, cy = r * S + S / 2;
+        if (s.given[i]) out.push(`<text class="sd-g${bad.has(i) ? ' bad' : ''}" x="${cx}" y="${cy + 11}">${s.given[i]}</text>`);
+        else if (s.x[i]) {
+          const wrong = ctx.flash && ctx.flash.has(i);
+          out.push(`<text class="sd-u${bad.has(i) || wrong ? ' bad' : ''}${ctx.fresh === i ? ' fresh' : ''}" x="${cx}" y="${cy + 11}">${s.x[i]}</text>`);
+        } else if (s.x[81 + i]) {
+          for (const d of E.bits(s.x[81 + i])) {
+            const nx = c * S + 12 + ((d - 1) % 3) * 18, ny = r * S + 17 + (((d - 1) / 3) | 0) * 18;
+            out.push(`<text class="sd-n" x="${nx}" y="${ny}">${d}</text>`);
+          }
+        }
+      }
+      if (h && h.level >= 2 && (h.unit === undefined || h.unit < 0)) {
+        const r = E.ROW[h.i], c = E.COL[h.i];
+        out.push(`<rect class="hcell" x="${c * S + 3}" y="${r * S + 3}" width="${S - 6}" height="${S - 6}" rx="5"/>`);
+      }
+      if (h && h.level >= 3 && h.d && !val(s, h.i)) {
+        const r = E.ROW[h.i], c = E.COL[h.i];
+        out.push(`<text class="sd-ghost" x="${c * S + S / 2}" y="${r * S + S / 2 + 11}">${h.d}</text>`);
+      }
+      return out.join('');
+    },
+    afterRender: s => padRefresh(s),
+    padHTML: () => `<div id="sdPad" class="sd-pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(d => `<button data-d="${d}">${d}</button>`).join('')}<button id="sdNotes" class="sd-wide">Notes</button><button id="sdErase" class="sd-wide">Gomme</button></div>`,
+    padBind: s => {
+      document.querySelectorAll('#sdPad [data-d]').forEach(b => b.addEventListener('click', () => { if (!won) setDigit(st, +b.dataset.d); }));
+      document.getElementById('sdNotes').addEventListener('click', () => { notesMode = !notesMode; padRefresh(st); });
+      document.getElementById('sdErase').addEventListener('click', () => {
+        if (won || sel < 0 || st.given[sel] || (!st.x[sel] && !st.x[81 + sel])) return;
+        commit(() => { st.x[sel] = 0; st.x[81 + sel] = 0; });
+      });
+    },
+    onKey: (s, e) => {
+      if (/^[1-9]$/.test(e.key)) { setDigit(s, +e.key); e.preventDefault(); }
+      else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') { if (sel >= 0 && !s.given[sel] && s.x[sel]) commit(() => { s.x[sel] = 0; }); }
+      else if (e.key === 'n') { notesMode = !notesMode; padRefresh(s); }
+      else if (e.key.startsWith('Arrow') && sel >= 0) {
+        const r = E.ROW[sel], c = E.COL[sel];
+        const m = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[e.key];
+        sel = ((r + m[0] + 9) % 9) * 9 + (c + m[1] + 9) % 9; render(); e.preventDefault();
+      }
+    },
+    pointerDown: (s, pt) => {
+      const cell = cellAt(pt);
+      if (!cell) return { pan: true };
+      sel = cell.r * 9 + cell.c; render();
+      return { pan: false };
+    },
+    pointerUp: () => {}
+  });
+})();
+
+
+(function () {
+  try {
+    var A = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+    if (!A) return;
+    A.addListener('backButton', function () {
+      var r = document.getElementById('rules');
+      if (r.classList.contains('on')) { r.classList.remove('on'); return; }
+      if (typeof hint !== 'undefined' && hint) { hint = null; showHintText(''); render(); return; }
+      if (inGame) { backFromGame(); return; }
+      A.minimizeApp();
+    });
+    A.addListener('pause', function () { try { save(); } catch (e) {} });
+  } catch (e) {}
+})();
+
+init();
+
+</script>
+</body>
+</html>

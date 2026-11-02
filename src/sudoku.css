@@ -1,0 +1,19 @@
+.sd-cell{fill:transparent}
+.sd-cell.zone2{fill:var(--ink);fill-opacity:.05}
+.sd-cell.samed{fill:var(--red);fill-opacity:.16}
+.sd-cell.sel{fill:var(--red);fill-opacity:.32}
+.sd-g{fill:var(--ink);font-family:'Chiffres',sans-serif;font-size:32px;font-weight:700;text-anchor:middle;pointer-events:none}
+.sd-u{fill:#9dbbe8;font-family:'Chiffres',sans-serif;font-size:32px;font-weight:700;text-anchor:middle;pointer-events:none}
+body.light .sd-u{fill:#1f4a8a}
+.sd-g.bad,.sd-u.bad{fill:var(--red2);text-decoration:underline}
+body.light .sd-u.bad{fill:var(--red2)}
+.sd-u.fresh{animation:fade .25s ease-out}
+.sd-n{fill:var(--ink2);font-family:'Chiffres',sans-serif;font-size:14px;font-weight:700;text-anchor:middle;pointer-events:none}
+.sd-ghost{fill:var(--red2);font-family:'Chiffres',sans-serif;font-size:32px;font-weight:700;text-anchor:middle;opacity:.6;animation:breathe 1.3s ease-in-out infinite}
+.sd-pad{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-top:6px}
+.sd-pad button{height:42px;border:1px solid var(--ink3);background:transparent;color:var(--ink);border-radius:6px;font-family:'Chiffres',sans-serif;font-size:21px;font-weight:700;cursor:pointer;padding:0}
+.sd-pad button.same{border-color:var(--red2);color:var(--red2)}
+.sd-pad button.done{opacity:.25}
+.sd-pad .sd-wide{grid-column:span 5;font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;height:32px}
+.sd-pad .sd-wide+.sd-wide{grid-column:span 4}
+.sd-pad #sdNotes.on{background:var(--ink);color:var(--navy2)}
