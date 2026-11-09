@@ -38,7 +38,7 @@ const SudoEngine = (function () {
       changed = false;
       for (let i = 0; i < N; i++) {
         if (v[i]) continue;
-        if (!c[i]) return false;
+        if (!c[i]) { propagate.fail = { type: 'cell', i }; return false; }
         if (pop(c[i]) === 1) {
           const d = bits(c[i])[0];
           if (place(i, d, `Cette case ne peut contenir que le ${d} : tous les autres chiffres sont déjà dans sa ligne, sa colonne ou son carré.`, -1)) return 'stop';
@@ -51,7 +51,7 @@ const SudoEngine = (function () {
           let where = -1, n = 0, placed = false;
           for (const j of unitCells[u]) { if (v[j] === d) { placed = true; break; } if (!v[j] && (c[j] & (1 << d))) { n++; where = j; } }
           if (placed) continue;
-          if (!n) return false;
+          if (!n) { propagate.fail = { type: 'unit', u, d }; return false; }
           if (n === 1) {
             if (place(where, d, `Dans ${unitName(u)}, le ${d} ne peut aller qu'ici : toutes les autres cases libres le voient déjà.`, u)) return 'stop';
             changed = true; break;
@@ -138,7 +138,7 @@ const SudoEngine = (function () {
   function generate(L) {
     const t0 = Date.now();
     let best = null;
-    for (let attempt = 0; attempt < 60; attempt++) {
+    for (let attempt = 0; attempt < 3000; attempt++) {
       const sol = fullGrid(), g = sol.slice();
       const order = [...Array(41).keys()].sort(() => Math.random() - 0.5);  // symmetric pairs (i, 80 - i)
       for (const i of order) {
@@ -154,7 +154,7 @@ const SudoEngine = (function () {
       const ok = rt.level >= L.minLevel && (!L.look || rt.look >= L.look);
       if (ok) return { W: 9, H: 9, given: g, sol, rating: rt };
       if (!best || rt.level > best.rating.level || (rt.level === best.rating.level && rt.look > best.rating.look)) best = { W: 9, H: 9, given: g, sol, rating: rt };
-      if (Date.now() - t0 > 6000) break;
+      if (Date.now() - t0 > (L.budget || 2500)) break;
     }
     return best;
   }
@@ -174,7 +174,7 @@ if (typeof module !== 'undefined') module.exports = SudoEngine;
     moyen:     { W: 9, H: 9, givens: 30, minLevel: 0, maxLevel: 0, label: 'Moyen',     kanji: '中', sizeLabel: '9×9 · moins de chiffres' },
     difficile: { W: 9, H: 9, givens: 26, minLevel: 1, maxLevel: 1, label: 'Difficile', kanji: '難', sizeLabel: '9×9 · paires et alignements' },
     expert:    { W: 9, H: 9, givens: 24, minLevel: 2, maxLevel: 2, label: 'Expert',    kanji: '極', sizeLabel: '9×9 · raisonnement par l\'absurde' },
-    maitre:    { W: 9, H: 9, givens: 22, minLevel: 2, maxLevel: 2, look: 6, label: 'Maître', kanji: '鬼', sizeLabel: '9×9 · chaînes d\'absurdes' }
+    maitre:    { W: 9, H: 9, givens: 21, minLevel: 2, maxLevel: 2, look: 14, budget: 6000, label: 'Maître', kanji: '鬼', sizeLabel: '9×9 · chaînes d\'absurdes' }
   };
   const val = (s, i) => s.given[i] || s.x[i];
   const values = s => { const v = new Int8Array(81); for (let i = 0; i < 81; i++) v[i] = val(s, i); return v; };
@@ -198,39 +198,99 @@ if (typeof module !== 'undefined') module.exports = SudoEngine;
       fresh = d ? i : null;
     });
   }
+  // ---- hints: one deduction from the digits on the grid (and eliminations already noted) ----
+  const UN = u => u < 9 ? 'cette ligne' : u < 18 ? 'cette colonne' : 'ce carré';
+  function visible(s) {
+    const v = new Int8Array(81);
+    for (let i = 0; i < 81; i++) v[i] = s.given[i] || (s.x[i] === s.sol[i] ? s.x[i] : 0);
+    const c = E.cands(v);
+    if (s.elim) for (let i = 0; i < 81; i++) if (!v[i]) c[i] &= ~s.elim[i];
+    return { v, c };
+  }
+  function singles(v, c) {
+    const base = E.cands(v);
+    const ex = i => (base[i] & ~c[i]) !== 0;          // some candidates removed by an elimination
+    for (let i = 0; i < 81; i++) if (!v[i] && E.pop(c[i]) === 1) {
+      const d = E.bits(c[i])[0];
+      return { i, d, unit: -1, text: ex(i)
+        ? `Cette case ne peut contenir que le ${d} : les autres chiffres sont soit déjà dans sa ligne, sa colonne ou son carré, soit exclus par une élimination (indice précédent ou ci-dessus).`
+        : `Cette case ne peut contenir que le ${d} : tous les autres chiffres sont déjà dans sa ligne, sa colonne ou son carré.` };
+    }
+    for (let u = 0; u < 27; u++) for (let d = 1; d <= 9; d++) {
+      let where = -1, n = 0, placed = false;
+      for (const j of E.unitCells[u]) { if (v[j] === d) { placed = true; break; } if (!v[j] && (c[j] & (1 << d))) { n++; where = j; } }
+      if (!placed && n === 1) {
+        const byElim = E.unitCells[u].some(j => !v[j] && j !== where && (base[j] & (1 << d)) && !(c[j] & (1 << d)));
+        return { i: where, d, unit: u, text: byElim
+          ? `Dans ${UN(u)}, le ${d} ne peut plus aller qu'ici : les autres cases libres voient déjà un ${d}, ou le ${d} y a été exclu par une élimination (indice précédent ou ci-dessus).`
+          : `Dans ${UN(u)}, le ${d} ne peut aller qu'ici : toutes les autres cases libres voient déjà un ${d} (dans leur ligne, leur colonne ou leur carré).` };
+      }
+    }
+    return null;
+  }
+  // pointing / claiming / naked pairs, described in words
+  function eliminations(v, c) {
+    const out = [];
+    for (let b = 0; b < 9; b++) for (let d = 1; d <= 9; d++) {
+      const cells = E.unitCells[18 + b].filter(j => !v[j] && (c[j] & (1 << d)));
+      if (cells.length < 2) continue;
+      for (const [lineOf, base, word] of [[E.ROW, 0, 'ligne'], [E.COL, 9, 'colonne']]) {
+        const l = lineOf[cells[0]];
+        if (!cells.every(j => lineOf[j] === l)) continue;
+        const hit = E.unitCells[base + l].filter(j => !v[j] && E.BOX[j] !== b && (c[j] & (1 << d)));
+        if (hit.length) out.push({ cells: hit, mask: 1 << d, unit: 18 + b, text: `Dans ce carré, le ${d} ne peut se trouver que sur une même ${word} : il ne peut donc pas être ailleurs sur cette ${word}.` });
+      }
+    }
+    for (let u = 0; u < 18; u++) for (let d = 1; d <= 9; d++) {
+      const cells = E.unitCells[u].filter(j => !v[j] && (c[j] & (1 << d)));
+      if (cells.length < 2) continue;
+      const b = E.BOX[cells[0]];
+      if (!cells.every(j => E.BOX[j] === b)) continue;
+      const hit = E.unitCells[18 + b].filter(j => !v[j] && (u < 9 ? E.ROW[j] !== u : E.COL[j] !== u - 9) && (c[j] & (1 << d)));
+      if (hit.length) out.push({ cells: hit, mask: 1 << d, unit: u, text: `Dans ${UN(u)}, le ${d} ne peut se trouver que dans un même carré : il ne peut donc pas être ailleurs dans ce carré.` });
+    }
+    for (let u = 0; u < 27; u++) {
+      const cs = E.unitCells[u].filter(j => !v[j] && E.pop(c[j]) === 2);
+      for (let a = 0; a < cs.length; a++) for (let b2 = a + 1; b2 < cs.length; b2++) if (c[cs[a]] === c[cs[b2]]) {
+        const m = c[cs[a]], [d1, d2] = E.bits(m);
+        const hit = E.unitCells[u].filter(j => j !== cs[a] && j !== cs[b2] && !v[j] && (c[j] & m));
+        if (hit.length) out.push({ cells: hit, mask: m, unit: u, pair: [cs[a], cs[b2]], text: `Dans ${UN(u)}, deux cases ne peuvent contenir que le ${d1} ou le ${d2} : ces deux chiffres leur sont réservés, et disparaissent des autres cases.` });
+      }
+    }
+    return out;
+  }
   function findHint(s) {
     for (let i = 0; i < 81; i++) if (s.x[i] && s.x[i] !== s.sol[i]) return { type: 'wrong', i, d: 0, text: `Ce ${s.x[i]} n'est pas à sa place : retire-le.` };
-    const v = Int8Array.from(s.sol.map((x, i) => (s.given[i] || (s.x[i] === x ? x : 0))));
-    const c = E.cands(v);
-    let found = null;
-    const note = (i, d, why, u) => { found = { i, d, text: why, unit: u }; return true; };
-    E.propagate(v, c, note);
-    if (!found) {
-      E.propagate(v, c, note, { advanced: true });
-      if (found) found.text += ' (Après avoir appliqué les paires et les alignements de chiffres dans les carrés.)';
+    const { v, c } = visible(s);
+    const one = singles(v, c);
+    if (one) return { type: 'logic', ...one };
+    const el = eliminations(v, c);
+    for (const e of el) {
+      const c2 = c.slice(); e.cells.forEach(j => (c2[j] &= ~e.mask));
+      const one2 = singles(v, c2);
+      if (one2) return { type: 'logic', ...one2, elim: e, unit: e.unit, text: `${e.text} Du coup : ${one2.text.charAt(0).toLowerCase() + one2.text.slice(1)}` };
     }
-    for (let round = 0; round < 60 && !found; round++) {
-      let progress = false;
-      for (let i = 0; i < 81 && !progress; i++) {
-        if (v[i]) continue;
-        for (const d of E.bits(c[i])) {
-          const v2 = v.slice(), c2 = c.slice();
-          v2[i] = d; c2[i] = 1 << d; for (const j of E.PEERS[i]) if (!v2[j]) c2[j] &= ~(1 << d);
-          if (E.propagate(v2, c2, null, { advanced: true }) === false) {
-            c[i] &= ~(1 << d); progress = true;
-            if (E.pop(c[i]) === 1) {
-              const left = E.bits(c[i])[0];
-              found = { i, d: left, text: `Raisonnement par l'absurde : si on mettait le ${d} ici, une autre case n'aurait plus aucun chiffre possible. Il ne reste donc que le ${left}.` };
-            }
-            break;
-          }
-        }
+    if (el.length) { const e = el[0]; return { type: 'note', i: e.cells[0], d: 0, unit: e.unit, elim: e, text: e.text + ' (Je retire ces candidats de tes notes et je les garde pour les indices suivants.)' }; }
+    // shortest proof by contradiction
+    let best = null;
+    for (let i = 0; i < 81; i++) {
+      if (v[i]) continue;
+      for (const d of E.bits(c[i])) {
+        const v2 = v.slice(), c2 = c.slice();
+        v2[i] = d; c2[i] = 1 << d; for (const j of E.PEERS[i]) if (!v2[j]) c2[j] &= ~(1 << d);
+        let steps = 0; E.propagate.fail = null;
+        if (E.propagate(v2, c2, () => { steps++; return false; }, { advanced: true }) === false && (!best || steps < best.steps)) best = { i, d, steps, fail: E.propagate.fail };
       }
-      if (!progress) break;
-      if (!found) E.propagate(v, c, (i, d, why, u) => { found = { i, d, unit: u, text: why + ' (Après avoir éliminé certains chiffres par l\'absurde.)' }; return true; }, { advanced: true });
     }
-    if (!found) for (let i = 0; i < 81; i++) if (!val(s, i)) { found = { i, d: s.sol[i], text: `Déduction avancée : cette case contient le ${s.sol[i]}.` }; break; }
-    return found;
+    if (best) {
+      const f = best.fail;
+      const where = !f ? 'la grille deviendrait impossible' : f.type === 'cell' ? 'la case entourée en rouge n\'aurait plus aucun chiffre possible' : `le ${f.d} n'aurait plus aucune place dans ${UN(f.u)} (entouré en rouge)`;
+      const left = E.bits(c[best.i] & ~(1 << best.d));
+      if (left.length === 1) return { type: 'logic', i: best.i, d: left[0], fail: f, text: `Raisonnement par l'absurde : si on mettait le ${best.d} ici, en enchaînant les déductions, ${where}. Il ne reste donc que le ${left[0]} pour cette case.` };
+      return { type: 'note', i: best.i, d: 0, fail: f, elim: { cells: [best.i], mask: 1 << best.d }, text: `Raisonnement par l'absurde : si on mettait le ${best.d} ici, en enchaînant les déductions, ${where}. Le ${best.d} est donc exclu de cette case (je le retire de tes notes).` };
+    }
+    for (let i = 0; i < 81; i++) if (!val(s, i)) return { type: 'logic', i, d: s.sol[i], text: `Déduction avancée : cette case contient le ${s.sol[i]}.` };
+    return null;
   }
   function padRefresh(s) {
     const pad = document.getElementById('sdPad');
@@ -289,7 +349,15 @@ if (typeof module !== 'undefined') module.exports = SudoEngine;
       h.r = E.ROW[h.i]; h.c = E.COL[h.i];
       h.focusText = h.type === 'wrong' ? 'L\'erreur est dans cette case.' : (h.unit >= 0 && h.unit !== undefined ? `Regarde ${h.unit < 9 ? 'cette ligne' : h.unit < 18 ? 'cette colonne' : 'ce carré'}.` : 'Regarde cette case.');
       h.fresh = h.i;
-      h.apply = st => { st.x[h.i] = h.d; st.x[81 + h.i] = 0; if (h.d) for (const j of E.PEERS[h.i]) st.x[81 + j] &= ~(1 << h.d); sel = h.i; };
+      h.applyLabel = h.type === 'note' ? 'Noter' : 'Poser';
+      h.apply = st => {
+        if (h.elim) {
+          if (!Array.isArray(st.elim)) st.elim = new Array(81).fill(0);
+          h.elim.cells.forEach(j => { st.elim[j] |= h.elim.mask; st.x[81 + j] &= ~h.elim.mask; });
+        }
+        if (h.type === 'note') return;
+        st.x[h.i] = h.d; st.x[81 + h.i] = 0; if (h.d) for (const j of E.PEERS[h.i]) st.x[81 + j] &= ~(1 << h.d); sel = h.i;
+      };
       return h;
     },
     render: (s, ctx) => {
@@ -330,6 +398,15 @@ if (typeof module !== 'undefined') module.exports = SudoEngine;
         const r = E.ROW[h.i], c = E.COL[h.i];
         out.push(`<rect class="hcell" x="${c * S + 3}" y="${r * S + 3}" width="${S - 6}" height="${S - 6}" rx="5"/>`);
       }
+      if (h && h.level >= 3 && h.fail) {
+        const cells = h.fail.type === 'cell' ? [h.fail.i] : E.unitCells[h.fail.u];
+        const rs = cells.map(i => E.ROW[i]), cs = cells.map(i => E.COL[i]);
+        out.push(`<rect class="hfail" x="${Math.min(...cs) * S + 2}" y="${Math.min(...rs) * S + 2}" width="${(Math.max(...cs) - Math.min(...cs) + 1) * S - 4}" height="${(Math.max(...rs) - Math.min(...rs) + 1) * S - 4}" rx="6"/>`);
+      }
+      if (h && h.level >= 3 && h.elim) h.elim.cells.forEach(i => {
+        const r = E.ROW[i], c = E.COL[i];
+        out.push(`<text class="sd-elim" x="${c * S + S / 2}" y="${r * S + S / 2 + 8}">${E.bits(h.elim.mask).map(d => '−' + d).join(' ')}</text>`);
+      });
       if (h && h.level >= 3 && h.d && !val(s, h.i)) {
         const r = E.ROW[h.i], c = E.COL[h.i];
         out.push(`<text class="sd-ghost" x="${c * S + S / 2}" y="${r * S + S / 2 + 11}">${h.d}</text>`);

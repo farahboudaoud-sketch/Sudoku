@@ -16,7 +16,7 @@ Les mises à jour s'installent par-dessus l'ancienne version sans perdre la part
 - **Règles** : remplir la grille 9×9 avec les chiffres de 1 à 9, une seule fois par ligne, colonne et carré 3×3.
 - **5 niveaux** classés par technique nécessaire : Facile et Moyen (chiffres isolés), Difficile (paires et alignements dans les carrés), Expert et Maître (raisonnements par l'absurde). Chaque grille est générée au hasard, symétrique, et vérifiée à solution unique.
 - **Pavé de chiffres** avec mode **Notes** (candidats) et gomme ; les conflits apparaissent en rouge, la ligne, la colonne et le carré de la case choisie sont surlignés, ainsi que les chiffres identiques ; un chiffre placé 9 fois s'estompe dans le pavé.
-- **Indices progressifs** expliqués (« dans cette ligne, le 4 ne peut aller qu'ici »…), vérifier, annuler, effacer, chrono, records, mode clair / sombre, zoom, sauvegarde automatique. Clavier pris en charge (chiffres, flèches, N pour les notes). Fonctionne hors connexion.
+- **Indices progressifs** expliqués, tirés uniquement de ce qui est visible sur la grille (avec, en dernier recours, un raisonnement par l'absurde qui montre où il aboutit) (« dans cette ligne, le 4 ne peut aller qu'ici »…), vérifier, annuler, effacer, chrono, records, mode clair / sombre, zoom, sauvegarde automatique. Clavier pris en charge (chiffres, flèches, N pour les notes). Fonctionne hors connexion.
 
 ## Structure
 

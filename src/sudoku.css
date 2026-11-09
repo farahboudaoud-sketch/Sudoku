@@ -17,3 +17,4 @@ body.light .sd-u.bad{fill:var(--red2)}
 .sd-pad .sd-wide{grid-column:span 5;font-family:'Shippori Mincho',serif;font-size:14px;font-weight:600;height:32px}
 .sd-pad .sd-wide+.sd-wide{grid-column:span 4}
 .sd-pad #sdNotes.on{background:var(--ink);color:var(--navy2)}
+.sd-elim{fill:var(--red2);font-family:'Chiffres',sans-serif;font-size:17px;font-weight:700;text-anchor:middle;animation:breathe 1.3s ease-in-out infinite}
